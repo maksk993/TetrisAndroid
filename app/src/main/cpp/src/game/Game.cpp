@@ -3,42 +3,57 @@
 Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth), m_screenHeight(screenHeight) {
     srand(time(0));
 
-    textureMap["cell"] = std::make_shared<Texture>("res/textures/cells.png");
-    textureMap["score_text"] = std::make_shared<Texture>("res/textures/score220x48.png");
-    textureMap["numbers"] = std::make_shared<Texture>("res/textures/numbers400x46.png");
+    textTex = std::make_shared<Texture>("res/textures/score220x48.png");
+
+    cellTexMap[0] = std::make_shared<Texture>("res/textures/black.png");
+    cellTexMap[1] = std::make_shared<Texture>("res/textures/red.png");
+    cellTexMap[2] = std::make_shared<Texture>("res/textures/orange.png");
+    cellTexMap[3] = std::make_shared<Texture>("res/textures/yellow.png");
+    cellTexMap[4] = std::make_shared<Texture>("res/textures/green.png");
+    cellTexMap[5] = std::make_shared<Texture>("res/textures/blue.png");
+    cellTexMap[6] = std::make_shared<Texture>("res/textures/purple.png");
+
+    numsTexMap[0] = std::make_shared<Texture>("res/textures/0.png");
+    numsTexMap[1] = std::make_shared<Texture>("res/textures/1.png");
+    numsTexMap[2] = std::make_shared<Texture>("res/textures/2.png");
+    numsTexMap[3] = std::make_shared<Texture>("res/textures/3.png");
+    numsTexMap[4] = std::make_shared<Texture>("res/textures/4.png");
+    numsTexMap[5] = std::make_shared<Texture>("res/textures/5.png");
+    numsTexMap[6] = std::make_shared<Texture>("res/textures/6.png");
+    numsTexMap[7] = std::make_shared<Texture>("res/textures/7.png");
+    numsTexMap[8] = std::make_shared<Texture>("res/textures/8.png");
+    numsTexMap[9] = std::make_shared<Texture>("res/textures/9.png");
 
     shaderProgramMap["sprite"] = std::make_shared<ShaderProgram>("res/shaders/vSprite.txt", "res/shaders/fSprite.txt");
     
-    std::vector<std::shared_ptr<Sprite>> cellSprites(cellTexturesArray.size());
-    std::vector<std::shared_ptr<Sprite>> scoreSprites(numbersTexturesArray.size());
+    std::vector<std::shared_ptr<Sprite>> cellSprites(cellTexMap.size());
+    std::vector<std::shared_ptr<Sprite>> scoreSprites(numsTexMap.size());
 
     std::shared_ptr<Sprite> scoreTextSprite = std::make_shared<Sprite>(
-        textureMap["score_text"],
+            textTex,
         shaderProgramMap["sprite"],
         glm::vec2(FlexibleSizes::getSize(m_screenWidth, 15), 17*m_screenHeight/20),
         glm::vec2(FlexibleSizes::getSize(m_screenWidth, 4), m_screenHeight/35),
         0.f
     );
 
-    for (int i = 0; i < cellTexturesArray.size(); i++) {
+    for (int i = 0; i < cellTexMap.size(); i++) {
         cellSprites[i] = std::make_shared<Sprite>(
-            textureMap["cell"],
+            cellTexMap[i],
             shaderProgramMap["sprite"],
             glm::vec2(0.f),
             glm::vec2(FlexibleSizes::getSize(m_screenWidth, 20)),
-            0.f,
-            cellTexturesArray[i]
+            0.f
         );
     }
 
-    for (int i = 0; i < numbersTexturesArray.size(); i++) {
+    for (int i = 0; i < numsTexMap.size(); i++) {
         scoreSprites[i] = std::make_shared<Sprite>(
-            textureMap["numbers"],
+                numsTexMap[i],
             shaderProgramMap["sprite"],
             glm::vec2(0.f),
             glm::vec2(m_screenWidth/18,m_screenHeight/33),
-            0.f,
-            numbersTexturesArray[i]
+            0.f
         );
     }
 
