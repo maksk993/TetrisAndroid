@@ -49,12 +49,15 @@ private:
 
     void start();
     void showGame();
+    void increaseSpeed();
 
     Clock clock;
     int nextColor = 0;
     int nextFigure = 0;
     float timer = 0.f;
-    int delay = 400;
+    float delay;
+    size_t fallenFiguresCounter;
+    bool pause;
 
     DataManager& dataManager = DataManager::getDataManager();
 };

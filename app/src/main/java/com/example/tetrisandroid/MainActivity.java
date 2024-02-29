@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity  {
         AssetManager assetManager = getAssets();
         assetManagerInit(assetManager);
 
-        for (int i = 1; i <= 5; i++){ // handle Buttons
+        for (int i = 1; i <= 7; i++){ // handle Buttons
             addButton(i);
         }
 
@@ -84,8 +84,14 @@ public class MainActivity extends AppCompatActivity  {
             case 4:
                 button = findViewById(R.id.buttonUp);
                 break;
-            default:
+            case 5:
                 button = findViewById(R.id.buttonRotate);
+                break;
+            case 6:
+                button = findViewById(R.id.buttonReset);
+                break;
+            default:
+                button = findViewById(R.id.buttonPause);
         }
 
         button.setOnClickListener(new View.OnClickListener() {

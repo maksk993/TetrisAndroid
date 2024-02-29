@@ -62,5 +62,25 @@
         android:layout_marginBottom="20dp"
         android:layout_marginStart="45dp"
         />
+    <Button
+        android:id="@+id/buttonReset"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textSize="8sp"
+        android:text="RES"
+        app:layout_constraintStart_toStartOf="@id/buttonRotate"
+        app:layout_constraintBottom_toTopOf="@id/buttonRotate"
+        android:layout_marginBottom="120dp"
+        />
+    <Button
+        android:id="@+id/buttonPause"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textSize="12sp"
+        android:text="II"
+        app:layout_constraintStart_toEndOf="@id/buttonReset"
+        app:layout_constraintTop_toTopOf="@id/buttonReset"
+        android:layout_marginStart="10dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

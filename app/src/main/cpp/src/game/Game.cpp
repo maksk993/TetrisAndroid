@@ -118,8 +118,10 @@ void Game::start() {
     m_miniScreen.clear();
     m_figureManager.setGameOver(false);
     m_figureManager.setShouldNewFigureBeSpawned(true);
-
     m_score.setScore(0);
+    delay = 1000;
+    fallenFiguresCounter = 0;
+    pause = false;
 }
 
 void Game::prepareToRender() {
@@ -145,13 +147,14 @@ void Game::run() {
     clock.restart();
     timer += time;
 
-    if (timer > delay) {
+    if (timer > delay && !pause) {
         m_figureManager.handleKeyDown();
         timer = 0;
     }
 
     if (m_figureManager.shouldNewFigureBeSpawned()) {
         m_field.deleteLines();
+        increaseSpeed();
         if (m_score > m_highScore) {
             m_highScore.setScore(m_score.getScore());
             dataManager.setHighScore(m_highScore.getScore());
@@ -175,6 +178,7 @@ void Game::showGame() {
 }
 
 void Game::handleTouch(int code) {
+    if (code <= 5 && pause) return;
     switch (code){
         case 1:
             m_figureManager.handleKeyLeft();
@@ -188,7 +192,17 @@ void Game::handleTouch(int code) {
         case 4:
             m_figureManager.handleKeyUp();
             break;
-        default:
+        case 5:
             m_figureManager.handleKeyRotate();
+            break;
+        case 6:
+            start();
+            break;
+        default:
+            pause ? pause = false : pause = true;
     }
+}
+
+void Game::increaseSpeed() {
+    if (++fallenFiguresCounter % 50 == 0) delay *= 0.8;
 }
