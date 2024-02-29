@@ -204,5 +204,5 @@ void Game::handleTouch(int code) {
 }
 
 void Game::increaseSpeed() {
-    if (++fallenFiguresCounter % 50 == 0) delay *= 0.8f;
+    if (++fallenFiguresCounter % 40 == 0) delay *= 0.8f;
 }
