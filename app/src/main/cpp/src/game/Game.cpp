@@ -107,7 +107,7 @@ Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth)
 
     m_highScore.setScore(dataManager.getHighScore());
     m_score.setScorePerLine(10);
-    m_field.setScoreAndHighScore(&m_score, &m_highScore);
+    m_field.setScore(&m_score);
     m_figureManager.init(&m_field, &m_miniScreen);
 
     start();
@@ -204,5 +204,5 @@ void Game::handleTouch(int code) {
 }
 
 void Game::increaseSpeed() {
-    if (++fallenFiguresCounter % 50 == 0) delay *= 0.8;
+    if (++fallenFiguresCounter % 50 == 0) delay *= 0.8f;
 }

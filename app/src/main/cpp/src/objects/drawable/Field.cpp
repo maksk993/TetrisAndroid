@@ -43,9 +43,8 @@ void Field::clear() {
 	}
 }
 
-void Field::setScoreAndHighScore(Score *pScore, HighScore *pHighScore) {
+void Field::setScore(Score *pScore) {
     m_pScore = pScore;
-    m_pHighScore = pHighScore;
 }
 
 void Field::saveField() {
