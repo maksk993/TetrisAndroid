@@ -14,7 +14,7 @@
 #include "../graphics/Sprite.hpp"
 
 #include "../utilities/Clock.hpp"
-#include "../utilities/FlexibleSizes.hpp"
+#include "../utilities/DataManager.h"
 
 class Game {
 public:
@@ -34,7 +34,8 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<ShaderProgram>> shaderProgramMap;
 
-    std::shared_ptr<Texture> textTex;
+    std::shared_ptr<Texture> scoreTextTex;
+    std::shared_ptr<Texture> highScoreTextTex;
     std::unordered_map<int, std::shared_ptr<Texture>> cellTexMap;
     std::unordered_map<int, std::shared_ptr<Texture>> numsTexMap;
 
@@ -42,7 +43,9 @@ private:
     Field m_field;
     MiniScreen m_miniScreen;
     Text m_scoreText;
+    Text m_highScoreText;
     Score m_score;
+    HighScore m_highScore;
 
     void start();
     void showGame();
@@ -52,4 +55,6 @@ private:
     int nextFigure = 0;
     float timer = 0.f;
     int delay = 400;
+
+    DataManager& dataManager = DataManager::getDataManager();
 };

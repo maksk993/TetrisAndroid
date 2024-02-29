@@ -23,7 +23,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         src/objects/drawable/Text.cpp
 
         src/utilities/Clock.cpp
-        src/utilities/FlexibleSizes.cpp
+        src/utilities/DataManager.cpp
         )
 add_subdirectory(external/glm)
 

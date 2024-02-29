@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity  {
         System.loadLibrary("tetrisandroid");
     }
     private MySurfaceWindow glSurfaceView;
+    private DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity  {
         for (int i = 1; i <= 5; i++){ // handle Buttons
             addButton(i);
         }
+
+        dataManager = new DataManager(this);
+        dataManager.getStartHighScore();
     }
 
     @Override
@@ -52,13 +56,14 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onPause(){
-        super.onPause();
         glSurfaceView.onPause();
+        super.onPause();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        dataManager.setNewHighScore();
+        super.onStop();
     }
 
     private native void assetManagerInit(AssetManager assetManager);

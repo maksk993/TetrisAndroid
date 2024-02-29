@@ -18,7 +18,7 @@ public:
     void init(const unsigned int width, const unsigned int height, std::vector<std::shared_ptr<Sprite>>& sprites, const glm::vec2& position, float offset);
     virtual void render() override;
     void clear();
-    void setScore(Score* pScore);
+    void setScoreAndHighScore(Score* pScore, HighScore* pHighScore);
     void saveField();
     void returnField();
     void makeFiguresMotionless();
@@ -35,6 +35,7 @@ private:
     std::vector<std::vector<Cell>> m_previousField;
 
     Score* m_pScore;
+    HighScore* m_pHighScore;
     
     std::vector<std::shared_ptr<Sprite>> m_pSprites;
     glm::vec2 m_position;

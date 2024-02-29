@@ -35,3 +35,7 @@ void Score::setScorePerLine(score_t scorePerLine) {
 void Score::increaseScore(int leftShiftBy) {
     m_score += m_scorePerLine << leftShiftBy;
 }
+
+bool Score::operator>(Score &other) {
+    return m_score > other.m_score;
+}

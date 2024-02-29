@@ -10,9 +10,12 @@ class Score : public IDrawableObject {
 public:
 	Score();
 
+    bool operator>(Score &other);
+
 	void init(std::vector<std::shared_ptr<Sprite>>& sprites, const glm::vec2& position, float offset);
 	virtual void render() override;
 	void setScore(score_t value);
+    score_t getScore() { return m_score; }
 	std::string getScoreString();
 	void setScorePerLine(score_t scorePerLine);
 	void increaseScore(int leftShiftBy);
@@ -27,3 +30,5 @@ private:
 	glm::vec2 m_position;
 	float m_offset;
 };
+
+using HighScore = Score;
