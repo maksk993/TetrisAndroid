@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity  {
     }
     private MySurfaceWindow glSurfaceView;
     private DataManager dataManager;
+    enum Buttons {
+        LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE;
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +43,8 @@ public class MainActivity extends AppCompatActivity  {
         AssetManager assetManager = getAssets();
         assetManagerInit(assetManager);
 
-        for (int i = 1; i <= 7; i++){ // handle Buttons
-            addButton(i);
+        for (Buttons button : Buttons.values()){ // handle Buttons
+            addButton(button);
         }
 
         dataManager = new DataManager(this);
@@ -69,25 +72,25 @@ public class MainActivity extends AppCompatActivity  {
     private native void assetManagerInit(AssetManager assetManager);
     private native void handleTouch(int code);
 
-    void addButton(int code){
+    void addButton(Buttons code){
         Button button;
         switch (code){
-            case 1:
+            case LEFT:
                 button = findViewById(R.id.buttonLeft);
                 break;
-            case 2:
+            case DOWN:
                 button = findViewById(R.id.buttonDown);
                 break;
-            case 3:
+            case RIGHT:
                 button = findViewById(R.id.buttonRight);
                 break;
-            case 4:
+            case UP:
                 button = findViewById(R.id.buttonUp);
                 break;
-            case 5:
+            case ROTATE:
                 button = findViewById(R.id.buttonRotate);
                 break;
-            case 6:
+            case RESET:
                 button = findViewById(R.id.buttonReset);
                 break;
             default:
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity  {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleTouch(code);
+                handleTouch(code.ordinal());
             }
         });
     }

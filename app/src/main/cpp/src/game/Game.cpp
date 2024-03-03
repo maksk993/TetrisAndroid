@@ -149,7 +149,7 @@ void Game::run() {
 
     if (timer > delay && !pause) {
         m_figureManager.handleKeyDown();
-        timer = 0;
+        timer = 0.f;
     }
 
     if (m_figureManager.shouldNewFigureBeSpawned()) {
@@ -178,24 +178,25 @@ void Game::showGame() {
 }
 
 void Game::handleTouch(int code) {
-    if (code <= 5 && pause) return;
-    switch (code){
-        case 1:
+    Buttons button = static_cast<Buttons>(code);
+    if (button <= Buttons::ROTATE && pause) return;
+    switch (button) {
+        case Buttons::LEFT:
             m_figureManager.handleKeyLeft();
             break;
-        case 2:
+        case Buttons::DOWN:
             m_figureManager.handleKeyDown();
             break;
-        case 3:
+        case Buttons::RIGHT:
             m_figureManager.handleKeyRight();
             break;
-        case 4:
+        case Buttons::UP:
             m_figureManager.handleKeyUp();
             break;
-        case 5:
+        case Buttons::ROTATE:
             m_figureManager.handleKeyRotate();
             break;
-        case 6:
+        case Buttons::RESET:
             start();
             break;
         default:

@@ -60,4 +60,5 @@ private:
     bool pause;
 
     DataManager& dataManager = DataManager::getDataManager();
+    enum class Buttons {LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE};
 };
