@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,8 +20,9 @@ public class MainActivity extends AppCompatActivity  {
     private MySurfaceWindow glSurfaceView;
     private DataManager dataManager;
     enum Buttons {
-        LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE;
+        LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE
     };
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,11 +100,36 @@ public class MainActivity extends AppCompatActivity  {
                 button = findViewById(R.id.buttonPause);
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleTouch(code.ordinal());
-            }
-        });
+        if (code == Buttons.DOWN) {
+            button.setOnTouchListener(new View.OnTouchListener() {
+                private Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        handleTouch(code.ordinal());
+                        handler.postDelayed(runnable, 40);
+                    }
+                };
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        handler.post(runnable);
+                        return true;
+                    }
+                    else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        handler.removeCallbacks(runnable);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+        else {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleTouch(code.ordinal());
+                }
+            });
+        }
     }
 }
