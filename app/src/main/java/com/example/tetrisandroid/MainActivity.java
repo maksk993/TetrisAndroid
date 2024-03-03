@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity  {
         int screenHeight = displayMetrics.heightPixels;
         glSurfaceView.setSizes(screenWidth, screenHeight);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                              WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
