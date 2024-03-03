@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TetrisAndroid</string>
+    <string name="buttonDown">DOWN</string>
+    <string name="buttonLeft">LEFT</string>
+    <string name="buttonRight">RIGHT</string>
+    <string name="buttonUp">QUICK DOWN</string>
+    <string name="buttonRotate">ROTATE</string>
+    <string name="buttonPause">II</string>
+    <string name="buttonReset">RES</string>
 </resources>

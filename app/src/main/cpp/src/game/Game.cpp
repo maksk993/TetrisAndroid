@@ -122,6 +122,8 @@ void Game::start() {
     delay = 1000;
     fallenFiguresCounter = 0;
     pause = false;
+    nextColor = m_figureManager.genNextColor();
+    nextFigure = m_figureManager.genNextFigure(nextColor);
 }
 
 void Game::prepareToRender() {
@@ -133,8 +135,6 @@ void Game::prepareToRender() {
     shaderProgramMap["sprite"]->setMatrix4("projectionMat", projectionMatrix);
 
     Renderer::clearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    nextColor = m_figureManager.genNextColor();
-    nextFigure = m_figureManager.genNextFigure(nextColor);
 }
 
 void Game::run() {

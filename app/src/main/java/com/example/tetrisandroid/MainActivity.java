@@ -23,6 +23,13 @@ public class MainActivity extends AppCompatActivity  {
         LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE
     };
     private final Handler handler = new Handler();
+    private final Runnable runnableForButtonDown = new Runnable() {
+        @Override
+        public void run() {
+            handleTouch(Buttons.DOWN.ordinal());
+            handler.postDelayed(runnableForButtonDown, 40);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +43,6 @@ public class MainActivity extends AppCompatActivity  {
         int screenHeight = displayMetrics.heightPixels;
         glSurfaceView.setSizes(screenWidth, screenHeight);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                              WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity  {
         assetManagerInit(assetManager);
 
         for (Buttons button : Buttons.values()){ // handle Buttons
-            addButton(button);
+            addButtonLogic(button);
         }
 
         dataManager = new DataManager(this);
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity  {
     private native void assetManagerInit(AssetManager assetManager);
     private native void handleTouch(int code);
 
-    void addButton(Buttons code){
+    void addButtonLogic(Buttons code){
         Button button;
         switch (code){
             case LEFT:
@@ -102,21 +105,14 @@ public class MainActivity extends AppCompatActivity  {
 
         if (code == Buttons.DOWN) {
             button.setOnTouchListener(new View.OnTouchListener() {
-                private Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        handleTouch(code.ordinal());
-                        handler.postDelayed(runnable, 40);
-                    }
-                };
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        handler.post(runnable);
+                        handler.post(runnableForButtonDown);
                         return true;
                     }
                     else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        handler.removeCallbacks(runnable);
+                        handler.removeCallbacks(runnableForButtonDown);
                         return true;
                     }
                     return false;

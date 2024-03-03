@@ -15,7 +15,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public native void run();
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        GLES20.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         startGame(m_width, m_height);
         loadGame();
     }
