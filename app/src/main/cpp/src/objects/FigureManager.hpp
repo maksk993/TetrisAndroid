@@ -12,7 +12,8 @@ public:
     int genNextFigure(int color);
     int genNextColor();
     void spawnNextFigure(int figure, int color);
-    bool moveFigure(int x, int y, int dx, int dy);
+    bool canFigureBeMoved(int x, int y, int dx, int dy);
+    void moveFigure(int x, int y, int dx, int dy);
     void rotateFigure();
 
     void handleKeyDown();
