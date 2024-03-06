@@ -3,6 +3,7 @@ package com.example.tetrisandroid;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity  {
     private final Runnable runnableForButtonDown = new Runnable() {
         @Override
         public void run() {
-            handleTouch(Buttons.DOWN.ordinal());
+            cppHandleTouch(Buttons.DOWN.ordinal());
             handler.postDelayed(runnableForButtonDown, 40);
         }
     };
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity  {
                              WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         AssetManager assetManager = getAssets();
-        assetManagerInit(assetManager);
+        cppAssetManagerInit(assetManager);
 
         for (Buttons button : Buttons.values()){ // handle Buttons
             addButtonLogic(button);
@@ -65,22 +66,35 @@ public class MainActivity extends AppCompatActivity  {
     protected void onResume(){
         super.onResume();
         glSurfaceView.onResume();
+        handler.removeCallbacks(runnableForButtonDown);
     }
 
     @Override
     protected void onPause(){
+        cppSetGamePaused();
+        findViewById(R.id.buttonPause).setBackgroundColor(getResources().getColor(R.color.pauseButtonPressed));
         glSurfaceView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop() {
+    public void onBackPressed(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onStop(){
         dataManager.setNewHighScore();
         super.onStop();
     }
 
-    private native void assetManagerInit(AssetManager assetManager);
-    private native void handleTouch(int code);
+    private native void cppAssetManagerInit(AssetManager assetManager);
+    private native void cppHandleTouch(int code);
+    private native boolean cppIsGamePaused();
+    private native void cppSetGamePaused();
 
     void addButtonLogic(Buttons code){
         Button button;
@@ -127,7 +141,16 @@ public class MainActivity extends AppCompatActivity  {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    handleTouch(code.ordinal());
+                    cppHandleTouch(code.ordinal());
+                    if (code == Buttons.RESET){
+                        findViewById(R.id.buttonPause).setBackgroundColor(getResources().getColor(R.color.buttonColor));
+                    }
+                    if (code == Buttons.PAUSE) {
+                        if (cppIsGamePaused())
+                            button.setBackgroundColor(getResources().getColor(R.color.pauseButtonPressed));
+                        else
+                            button.setBackgroundColor(getResources().getColor(R.color.buttonColor));
+                    }
                 }
             });
         }

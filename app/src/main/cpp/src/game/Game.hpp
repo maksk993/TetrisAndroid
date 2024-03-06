@@ -22,6 +22,8 @@ public:
     void run();
     void prepareToRender();
     void handleTouch(int code);
+    bool isGamePaused();
+    void setGamePaused();
 
 private:
     size_t m_screenWidth;

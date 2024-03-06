@@ -26,7 +26,7 @@ Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth)
     numsTexMap[9] = std::make_shared<Texture>("res/textures/9.png");
 
     shaderProgramMap["sprite"] = std::make_shared<ShaderProgram>("res/shaders/vSprite.txt", "res/shaders/fSprite.txt");
-    
+
     std::vector<std::shared_ptr<Sprite>> cellSprites(cellTexMap.size());
     std::vector<std::shared_ptr<Sprite>> scoreSprites(numsTexMap.size());
     std::vector<std::shared_ptr<Sprite>> highScoreSprites(numsTexMap.size());
@@ -78,17 +78,17 @@ Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth)
     m_highScoreText.init(highScoreTextSprite);
 
     m_field.init(
-        FIELD_WIDTH, 
-        FIELD_HEIGHT, 
-        cellSprites, 
+        FIELD_WIDTH,
+        FIELD_HEIGHT,
+        cellSprites,
         glm::vec2(m_screenWidth/10, 2*m_screenHeight/5),
         m_screenWidth/20
     );
 
     m_miniScreen.init(
-        MINISCREEN_WIDTH, 
-        MINISCREEN_HEIGHT, 
-        cellSprites, 
+        MINISCREEN_WIDTH,
+        MINISCREEN_HEIGHT,
+        cellSprites,
         glm::vec2(7*m_screenWidth/10, 2*m_screenHeight/3),
         m_screenWidth/20
     );
@@ -111,6 +111,7 @@ Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth)
     m_figureManager.init(&m_field, &m_miniScreen);
 
     start();
+    prepareToRender();
 }
 
 void Game::start() {
@@ -206,4 +207,12 @@ void Game::handleTouch(int code) {
 
 void Game::increaseSpeed() {
     if (++fallenFiguresCounter % 40 == 0) delay *= 0.8f;
+}
+
+bool Game::isGamePaused() {
+    return pause;
+}
+
+void Game::setGamePaused() {
+    pause = true;
 }

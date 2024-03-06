@@ -10,13 +10,11 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private int m_width;
     private int m_height;
 
-    public native void startGame(int screenWidth, int screenHeight);
-    public native void loadGame();
-    public native void run();
+    public native void cppStartGame(int screenWidth, int screenHeight);
+    public native void cppRun();
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        startGame(m_width, m_height);
-        loadGame();
+        cppStartGame(m_width, m_height);
     }
 
     @Override
@@ -26,7 +24,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        run();
+        cppRun();
     }
 
     public void setSizes(int width, int height){
