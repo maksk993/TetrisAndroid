@@ -5,6 +5,7 @@
     <string name="buttonRight">RIGHT</string>
     <string name="buttonUp">QUICK DOWN</string>
     <string name="buttonRotate">ROTATE</string>
-    <string name="buttonPause">II</string>
-    <string name="buttonReset">RES</string>
+    <string name="buttonPause">&#xe900;</string>
+    <string name="buttonResume">&#xea1c;</string>
+    <string name="buttonReset">&#xea2e;</string>
 </resources>

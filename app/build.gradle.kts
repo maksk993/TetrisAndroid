@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.tetrisandroid"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onPause(){
         cppSetGamePaused();
-        findViewById(R.id.buttonPause).setBackgroundColor(getResources().getColor(R.color.pauseButtonPressed));
+        changePauseButtonToResume(true);
         glSurfaceView.onPause();
         super.onPause();
     }
@@ -142,17 +142,28 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void onClick(View view) {
                     cppHandleTouch(code.ordinal());
-                    if (code == Buttons.RESET){
-                        findViewById(R.id.buttonPause).setBackgroundColor(getResources().getColor(R.color.buttonColor));
-                    }
+                    if (code == Buttons.RESET)
+                        changePauseButtonToResume(false);
                     if (code == Buttons.PAUSE) {
                         if (cppIsGamePaused())
-                            button.setBackgroundColor(getResources().getColor(R.color.pauseButtonPressed));
+                            changePauseButtonToResume(true);
                         else
-                            button.setBackgroundColor(getResources().getColor(R.color.buttonColor));
+                            changePauseButtonToResume(false);
                     }
                 }
             });
+        }
+    }
+
+    private void changePauseButtonToResume(boolean pause_to_resume) {
+        Button button = findViewById(R.id.buttonPause);
+        if (pause_to_resume){
+            button.setBackgroundColor(getResources().getColor(R.color.pauseButtonPressed));
+            button.setText(getString(R.string.buttonResume));
+        }
+        else {
+            button.setText(getString(R.string.buttonPause));
+            button.setBackgroundColor(getResources().getColor(R.color.buttonColor));
         }
     }
 }
