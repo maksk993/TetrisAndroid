@@ -121,38 +121,39 @@ public class MainActivity extends AppCompatActivity  {
                 button = findViewById(R.id.buttonPause);
         }
 
-        if (code == Buttons.DOWN) {
-            button.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        handler.post(runnableForButtonDown);
-                        return true;
-                    }
-                    else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        handler.removeCallbacks(runnableForButtonDown);
-                        return true;
-                    }
-                    return false;
-                }
-            });
-        }
-        else {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    cppHandleTouch(code.ordinal());
-                    if (code == Buttons.RESET)
-                        changePauseButtonToResume(false);
-                    if (code == Buttons.PAUSE) {
-                        if (cppIsGamePaused())
-                            changePauseButtonToResume(true);
-                        else
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    switch (code) {
+                        case DOWN:
+                            handler.post(runnableForButtonDown);
+                            break;
+                        case RESET:
+                            cppHandleTouch(code.ordinal());
                             changePauseButtonToResume(false);
+                            break;
+                        case PAUSE:
+                            cppHandleTouch(code.ordinal());
+                            if (cppIsGamePaused())
+                                changePauseButtonToResume(true);
+                            else
+                                changePauseButtonToResume(false);
+                            break;
+                        default:
+                            cppHandleTouch(code.ordinal());
                     }
+                    return true;
                 }
-            });
-        }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if (code == Buttons.DOWN){
+                        handler.removeCallbacks(runnableForButtonDown);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void changePauseButtonToResume(boolean pause_to_resume) {

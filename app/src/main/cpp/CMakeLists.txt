@@ -18,6 +18,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         src/graphics/MyAssetManager.cpp
 
         src/objects/FigureManager.cpp
+        src/objects/drawable/NumerableObject.cpp
+        src/objects/drawable/Speed.cpp
         src/objects/drawable/Score.cpp
         src/objects/drawable/Field.cpp
         src/objects/drawable/Text.cpp

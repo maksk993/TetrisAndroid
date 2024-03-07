@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "../objects/drawable/Score.hpp"
+#include "../objects/drawable/Speed.hpp"
 #include "../objects/drawable/Field.hpp"
 #include "../objects/drawable/Text.hpp"
 #include "../objects/FigureManager.hpp"
@@ -38,6 +39,7 @@ private:
 
     std::shared_ptr<Texture> scoreTextTex;
     std::shared_ptr<Texture> highScoreTextTex;
+    std::shared_ptr<Texture> speedTextTex;
     std::unordered_map<int, std::shared_ptr<Texture>> cellTexMap;
     std::unordered_map<int, std::shared_ptr<Texture>> numsTexMap;
 
@@ -46,9 +48,12 @@ private:
     MiniScreen m_miniScreen;
     Text m_scoreText;
     Text m_highScoreText;
+    Text m_speedText;
     Score m_score;
     HighScore m_highScore;
+    Speed m_speed;
 
+    void loadResources();
     void start();
     void showGame();
     void increaseSpeed();
