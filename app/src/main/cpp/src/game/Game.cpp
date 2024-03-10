@@ -1,7 +1,7 @@
 ﻿#include "Game.hpp"
 
 Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth), m_screenHeight(screenHeight) {
-    srand(time(0));
+    srand(std::time(0));
     loadResources();
     start();
     prepareToRender();
@@ -14,11 +14,12 @@ void Game::start() {
     m_figureManager.setShouldNewFigureBeSpawned(true);
     m_score.setValue(0);
     m_speed.setValue(1);
-    delay = 1000;
+    figureFallDelay = 1000.f;
     fallenFiguresCounter = 0;
     pause = false;
     nextColor = m_figureManager.genNextColor();
     nextFigure = m_figureManager.genNextFigure(nextColor);
+    m_currentGameState = EGameState::figureIsFalling;
 }
 
 void Game::prepareToRender() {
@@ -33,45 +34,8 @@ void Game::prepareToRender() {
 }
 
 void Game::run() {
-    if (m_figureManager.isGameOver()) {
-        start();
-    }
-    Renderer::clear();
-
-    float time = clock.getElapsedTime();
-    clock.restart();
-    timer += time;
-
-    if (timer > delay && !pause) {
-        m_figureManager.handleKeyDown();
-        timer = 0.f;
-    }
-
-    if (m_figureManager.shouldNewFigureBeSpawned()) {
-        m_field.deleteLines();
-        increaseSpeed();
-        if (m_score > m_highScore) {
-            m_highScore.setValue(m_score.getValue());
-            dataManager.setHighScore(m_highScore.getValue());
-        }
-        m_figureManager.spawnNextFigure(nextFigure, nextColor);
-        nextColor = m_figureManager.genNextColor();
-        nextFigure = m_figureManager.genNextFigure(nextColor);
-        m_figureManager.setShouldNewFigureBeSpawned(false);
-    }
-
+    update();
     showGame();
-}
-
-void Game::showGame() {
-    m_field.render();
-    m_scoreText.render();
-    m_highScoreText.render();
-    m_speedText.render();
-    m_score.render();
-    m_highScore.render();
-    m_speed.render();
-    m_miniScreen.render();
 }
 
 void Game::handleTouch(int code) {
@@ -101,9 +65,76 @@ void Game::handleTouch(int code) {
     }
 }
 
+void Game::update() {
+    switch (m_currentGameState)
+    {
+        case Game::EGameState::figureIsFalling:
+            if (m_figureManager.isGameOver()) {
+                start();
+            }
+
+            time = clock.getElapsedTime();
+            clock.restart();
+            timer += time;
+
+            if (timer > figureFallDelay && !pause) {
+                m_figureManager.handleKeyDown();
+                timer = 0.f;
+            }
+
+            if (m_figureManager.shouldNewFigureBeSpawned()) {
+                if (m_field.shouldAnyLineBeDeleted()) {
+                    m_currentGameState = EGameState::lineIsDeleting;
+                }
+                else {
+                    m_figureManager.setShouldNewFigureBeSpawned(false);
+                    spawnNewFigureAndGenerateNext();
+                }
+            }
+            break;
+
+        case Game::EGameState::lineIsDeleting:
+            if (m_figureManager.shouldNewFigureBeSpawned()) {
+                if (m_score > m_highScore) {
+                    m_highScore.setValue(m_score.getValue());
+                    dataManager.setHighScore(m_highScore.getValue());
+                }
+                m_figureManager.setShouldNewFigureBeSpawned(false);
+                shouldLineDeletionAnimationStart = true;
+            }
+            else if (shouldLineDeletionAnimationStart) {
+                time = clock.getElapsedTime();
+                clock.restart();
+                timer += time;
+
+                if (timer > lineDeletionDelay) {
+                    static int j = 0;
+                    m_field.deleteLinesAnimation(j++);
+                    if (j > m_field.getWidth()) {
+                        shouldLineDeletionAnimationStart = false;
+                        j = 0;
+                    }
+                    timer = 0.f;
+                }
+            }
+            else {
+                spawnNewFigureAndGenerateNext();
+                m_currentGameState = EGameState::figureIsFalling;
+            }
+            break;
+    }
+}
+
+void Game::spawnNewFigureAndGenerateNext() {
+    m_figureManager.spawnNextFigure(nextFigure, nextColor);
+    nextColor = m_figureManager.genNextColor();
+    nextFigure = m_figureManager.genNextFigure(nextColor);
+    increaseSpeed();
+}
+
 void Game::increaseSpeed() {
     if (++fallenFiguresCounter % 40 == 0) {
-        delay *= 0.8f;
+        figureFallDelay *= 0.8f;
         m_speed.increaseValue(1);
     }
 }
@@ -114,6 +145,18 @@ bool Game::isGamePaused() {
 
 void Game::setGamePaused() {
     pause = true;
+}
+
+void Game::showGame() {
+    Renderer::clear();
+    m_field.render();
+    m_scoreText.render();
+    m_highScoreText.render();
+    m_speedText.render();
+    m_score.render();
+    m_highScore.render();
+    m_speed.render();
+    m_miniScreen.render();
 }
 
 void Game::loadResources() {

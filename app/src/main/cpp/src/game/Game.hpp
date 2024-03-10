@@ -53,19 +53,27 @@ private:
     HighScore m_highScore;
     Speed m_speed;
 
-    void loadResources();
-    void start();
-    void showGame();
-    void increaseSpeed();
-
     Clock clock;
     int nextColor = 0;
     int nextFigure = 0;
     float timer = 0.f;
-    float delay;
+    float time = 0.f;
+    float figureFallDelay;
+    float lineDeletionDelay = 50.f;
     size_t fallenFiguresCounter;
     bool pause;
+    bool shouldLineDeletionAnimationStart = false;
+
+    enum class EGameState { figureIsFalling, lineIsDeleting };
+    EGameState m_currentGameState;
 
     DataManager& dataManager = DataManager::getDataManager();
     enum class Buttons {LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE};
+
+    void loadResources();
+    void start();
+    void update();
+    void spawnNewFigureAndGenerateNext();
+    void showGame();
+    void increaseSpeed();
 };
