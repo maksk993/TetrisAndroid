@@ -61,10 +61,10 @@ private:
     float figureFallDelay;
     float lineDeletionDelay = 50.f;
     size_t fallenFiguresCounter;
-    bool pause;
+    bool pause = false;
     bool shouldLineDeletionAnimationStart = false;
 
-    enum class EGameState { figureIsFalling, lineIsDeleting };
+    enum class EGameState { figureIsFalling, lineIsDeleting, gameIsRestarting };
     EGameState m_currentGameState;
 
     DataManager& dataManager = DataManager::getDataManager();

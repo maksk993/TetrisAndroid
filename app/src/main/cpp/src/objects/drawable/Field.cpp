@@ -89,3 +89,9 @@ void Field::deleteLinesAnimation(int j) {
         }
     }
 }
+
+void Field::markAllLinesToDelete() {
+    for (int i = 0; i < m_height; i++) {
+        m_field[i][0].toDelete = true;
+    }
+}

@@ -10,13 +10,11 @@ Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth)
 void Game::start() {
     m_field.clear();
     m_miniScreen.clear();
-    m_figureManager.setGameOver(false);
     m_figureManager.setShouldNewFigureBeSpawned(true);
     m_score.setValue(0);
     m_speed.setValue(1);
     figureFallDelay = 1000.f;
     fallenFiguresCounter = 0;
-    pause = false;
     nextColor = m_figureManager.genNextColor();
     nextFigure = m_figureManager.genNextFigure(nextColor);
     m_currentGameState = EGameState::figureIsFalling;
@@ -58,7 +56,8 @@ void Game::handleTouch(int code) {
             m_figureManager.handleKeyRotate();
             break;
         case Buttons::RESET:
-            start();
+            m_figureManager.setGameOver(true);
+            pause = false;
             break;
         default:
             pause ? pause = false : pause = true;
@@ -70,7 +69,9 @@ void Game::update() {
     {
         case Game::EGameState::figureIsFalling:
             if (m_figureManager.isGameOver()) {
-                start();
+                m_field.markAllLinesToDelete();
+                m_currentGameState = EGameState::gameIsRestarting;
+                break;
             }
 
             time = clock.getElapsedTime();
@@ -120,6 +121,28 @@ void Game::update() {
             else {
                 spawnNewFigureAndGenerateNext();
                 m_currentGameState = EGameState::figureIsFalling;
+            }
+            break;
+
+        case Game::EGameState::gameIsRestarting:
+            if (m_figureManager.isGameOver()) {
+                time = clock.getElapsedTime();
+                clock.restart();
+                timer += time;
+
+                if (timer > lineDeletionDelay) {
+                    static int j = 0;
+                    m_field.deleteLinesAnimation(j++);
+                    if (j > m_field.getWidth()) {
+                        m_figureManager.setGameOver(false);
+                        j = 0;
+                    }
+                    timer = 0.f;
+                }
+            }
+            else {
+                m_currentGameState = EGameState::figureIsFalling;
+                start();
             }
             break;
     }
