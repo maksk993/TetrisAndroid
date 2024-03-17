@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".StartMenuActivity">
+
+    <Button
+        android:id="@+id/buttonPlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="220dp"
+        android:text="@string/buttonPlay"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonColor"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.4"
+        />
+    <Button
+        android:id="@+id/buttonOptions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/buttonOptions"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonColor"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/buttonPlay"
+        app:layout_constraintEnd_toEndOf="@id/buttonPlay"
+        app:layout_constraintTop_toBottomOf="@id/buttonPlay"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.4"
+        />
+    <Button
+        android:id="@+id/buttonExit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/buttonExit"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonColor"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/buttonOptions"
+        app:layout_constraintEnd_toEndOf="@id/buttonOptions"
+        app:layout_constraintTop_toBottomOf="@id/buttonOptions"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.4"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

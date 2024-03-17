@@ -31,18 +31,29 @@ public class MainActivity extends AppCompatActivity  {
             handler.postDelayed(runnableForButtonDown, 40);
         }
     };
+    private float startSpeed;
+    private int speedLevel;
+    private int speedIncreaseCoef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        glSurfaceView = (MySurfaceWindow) findViewById(R.id.MySurfaceWindow);
 
+        Intent intent = getIntent();
+        if (intent != null){
+            startSpeed = intent.getFloatExtra("StartSpeed", 1.f) * 1000;
+            speedLevel = intent.getIntExtra("Speed level", 1);
+            speedIncreaseCoef = intent.getIntExtra("Speed increase coef", 40);
+        }
+
+        glSurfaceView = (MySurfaceWindow) findViewById(R.id.MySurfaceWindow);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
         glSurfaceView.setSizes(screenWidth, screenHeight);
+        glSurfaceView.setSpeed(startSpeed, speedLevel, speedIncreaseCoef);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

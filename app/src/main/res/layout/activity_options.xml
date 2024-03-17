@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".OptionsActivity">
+
+    <TextView
+        android:id="@+id/textStartSpeed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="140dp"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.35"
+        android:text="@string/textStartSpeed"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        />
+
+    <Spinner
+        android:id="@+id/spinnerStartSpeed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/white"
+        app:layout_constraintStart_toEndOf="@id/textStartSpeed"
+        app:layout_constraintTop_toTopOf="@id/textStartSpeed"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.35"
+        android:entries="@array/startSpeedSpinner"
+        />
+
+    <TextView
+        android:id="@+id/textIncreaseSpeed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/textStartSpeed"
+        app:layout_constraintTop_toBottomOf="@id/textStartSpeed"
+        android:layout_marginTop="50dp"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.35"
+        android:text="@string/textIncreaseSpeed"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        />
+
+    <Spinner
+        android:id="@+id/spinnerIncreaseSpeed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/white"
+        app:layout_constraintStart_toEndOf="@id/textIncreaseSpeed"
+        app:layout_constraintTop_toTopOf="@id/textIncreaseSpeed"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.35"
+        android:entries="@array/increaseSpeedSpinner"
+        />
+
+    <Button
+        android:id="@+id/buttonSaveAndReturn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="80dp"
+        android:text="@string/buttonSaveAndReturn"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonColor"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.4"
+        />
+
+    <Button
+        android:id="@+id/buttonDefault"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/buttonDefault"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonColor"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/buttonSaveAndReturn"
+        app:layout_constraintBottom_toTopOf="@id/buttonSaveAndReturn"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.4"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
