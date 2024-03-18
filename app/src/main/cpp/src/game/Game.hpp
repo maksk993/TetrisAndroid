@@ -19,7 +19,7 @@
 
 class Game {
 public:
-    Game(size_t screenWidth, size_t screenHeight);
+    Game(size_t screenWidth, size_t screenHeight, float startSpeed, int speedLevel, int increaseCoef);
     void run();
     void prepareToRender();
     void handleTouch(int code);
@@ -58,6 +58,9 @@ private:
     int nextFigure = 0;
     float timer = 0.f;
     float time = 0.f;
+    float m_startSpeed;
+    int m_startSpeedLevel;
+    int m_speedIncreaseCoef;
     float figureFallDelay;
     float lineDeletionDelay = 50.f;
     size_t fallenFiguresCounter;

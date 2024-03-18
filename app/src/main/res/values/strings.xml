@@ -1,5 +1,28 @@
 <resources>
     <string name="app_name">TetrisAndroid</string>
+    <string name="buttonPlay">PLAY</string>
+    <string name="buttonOptions">OPTIONS</string>
+    <string name="buttonExit">EXIT</string>
+
+    <string name="textStartSpeed">Starting speed</string>
+    <string name="textIncreaseSpeed">Increase speed every</string>
+    <string name="buttonSaveAndReturn">SAVE AND RETURN</string>
+    <string name="buttonDefault">DEFAULT</string>
+    <string-array name="startSpeedSpinner">
+        <item>1 (1 s)</item>
+        <item>2 (0.8 s)</item>
+        <item>3 (0.64 s)</item>
+        <item>4 (0.512 s)</item>
+        <item>5 (0.41 s)</item>
+    </string-array>
+    <string-array name="increaseSpeedSpinner">
+        <item>20 figures</item>
+        <item>30 figures</item>
+        <item>40 figures</item>
+        <item>50 figures</item>
+        <item>No speed increase</item>
+    </string-array>
+
     <string name="buttonDown">DOWN</string>
     <string name="buttonLeft">LEFT</string>
     <string name="buttonRight">RIGHT</string>

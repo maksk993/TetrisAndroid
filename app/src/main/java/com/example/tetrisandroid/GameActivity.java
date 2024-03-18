@@ -13,47 +13,50 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity  {
+import com.example.datamanager.DataManager;
+import com.example.renderer.MySurfaceView;
+
+public class GameActivity extends AppCompatActivity  {
 
     static {
         System.loadLibrary("tetrisandroid");
     }
-    private MySurfaceWindow glSurfaceView;
-    private DataManager dataManager;
+    private MySurfaceView m_surfaceView;
+    private DataManager m_dataManager;
     enum Buttons {
         LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE
     };
-    private final Handler handler = new Handler();
-    private final Runnable runnableForButtonDown = new Runnable() {
+    private final Handler m_handler = new Handler();
+    private final Runnable m_runnableForButtonDown = new Runnable() {
         @Override
         public void run() {
             cppHandleTouch(Buttons.DOWN.ordinal());
-            handler.postDelayed(runnableForButtonDown, 40);
+            m_handler.postDelayed(m_runnableForButtonDown, 40);
         }
     };
-    private float startSpeed;
-    private int speedLevel;
-    private int speedIncreaseCoef;
+    private float m_startSpeed;
+    private int m_speedLevel;
+    private int m_speedIncreaseCoef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
         if (intent != null){
-            startSpeed = intent.getFloatExtra("StartSpeed", 1.f) * 1000;
-            speedLevel = intent.getIntExtra("Speed level", 1);
-            speedIncreaseCoef = intent.getIntExtra("Speed increase coef", 40);
+            m_startSpeed = intent.getFloatExtra("StartSpeed", 1.f) * 1000;
+            m_speedLevel = intent.getIntExtra("Speed level", 1);
+            m_speedIncreaseCoef = intent.getIntExtra("Speed increase coef", 40);
         }
 
-        glSurfaceView = (MySurfaceWindow) findViewById(R.id.MySurfaceWindow);
+        m_surfaceView = (MySurfaceView) findViewById(R.id.MySurfaceView);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
-        glSurfaceView.setSizes(screenWidth, screenHeight);
-        glSurfaceView.setSpeed(startSpeed, speedLevel, speedIncreaseCoef);
+        m_surfaceView.setSizes(screenWidth, screenHeight);
+        m_surfaceView.setSpeed(m_startSpeed, m_speedLevel, m_speedIncreaseCoef);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -69,22 +72,22 @@ public class MainActivity extends AppCompatActivity  {
             addButtonLogic(button);
         }
 
-        dataManager = new DataManager(this);
-        dataManager.getStartHighScore();
+        m_dataManager = new DataManager(this);
+        m_dataManager.getStartHighScore();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        glSurfaceView.onResume();
-        handler.removeCallbacks(runnableForButtonDown);
+        m_surfaceView.onResume();
+        m_handler.removeCallbacks(m_runnableForButtonDown);
     }
 
     @Override
     protected void onPause(){
         cppSetGamePaused();
         changePauseButtonToResume(true);
-        glSurfaceView.onPause();
+        m_surfaceView.onPause();
         super.onPause();
     }
 
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onStop(){
-        dataManager.setNewHighScore();
+        m_dataManager.setNewHighScore();
         super.onStop();
     }
 
@@ -138,7 +141,7 @@ public class MainActivity extends AppCompatActivity  {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                     switch (code) {
                         case DOWN:
-                            handler.post(runnableForButtonDown);
+                            m_handler.post(m_runnableForButtonDown);
                             break;
                         case RESET:
                             cppHandleTouch(code.ordinal());
@@ -158,7 +161,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if (code == Buttons.DOWN){
-                        handler.removeCallbacks(runnableForButtonDown);
+                        m_handler.removeCallbacks(m_runnableForButtonDown);
                     }
                     return true;
                 }

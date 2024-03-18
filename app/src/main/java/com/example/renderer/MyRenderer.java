@@ -1,4 +1,4 @@
-package com.example.tetrisandroid;
+package com.example.renderer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -9,12 +9,15 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private int m_width;
     private int m_height;
+    private float m_startSpeed;
+    private int m_speedLevel;
+    private int m_increaseCoef;
 
-    public native void cppStartGame(int screenWidth, int screenHeight);
+    public native void cppStartGame(int screenWidth, int screenHeight, float startSpeed, int speedLevel, int increaseCoef);
     public native void cppRun();
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        cppStartGame(m_width, m_height);
+        cppStartGame(m_width, m_height, m_startSpeed, m_speedLevel, m_increaseCoef);
     }
 
     @Override
@@ -30,5 +33,11 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public void setSizes(int width, int height){
         m_width = width;
         m_height = height;
+    }
+
+    public void setSpeed(float startSpeed, int speedLevel, int increaseCoef){
+        m_startSpeed = startSpeed;
+        m_speedLevel = speedLevel;
+        m_increaseCoef = increaseCoef;
     }
 }

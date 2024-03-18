@@ -1,6 +1,9 @@
 ﻿#include "Game.hpp"
 
-Game::Game(size_t screenWidth, size_t screenHeight) : m_screenWidth(screenWidth), m_screenHeight(screenHeight) {
+Game::Game(size_t screenWidth, size_t screenHeight, float startSpeed, int speedLevel, int increaseCoef)
+: m_screenWidth(screenWidth), m_screenHeight(screenHeight),
+m_startSpeed(startSpeed), m_startSpeedLevel(speedLevel), m_speedIncreaseCoef(increaseCoef)
+{
     srand(std::time(0));
     loadResources();
     start();
@@ -13,7 +16,8 @@ void Game::start() {
     m_figureManager.setShouldNewFigureBeSpawned(true);
     m_score.setValue(0);
     m_speed.setValue(1);
-    figureFallDelay = 1000.f;
+    figureFallDelay = m_startSpeed;
+    m_speed.setValue(m_startSpeedLevel);
     fallenFiguresCounter = 0;
     nextColor = m_figureManager.genNextColor();
     nextFigure = m_figureManager.genNextFigure(nextColor);
@@ -156,7 +160,8 @@ void Game::spawnNewFigureAndGenerateNext() {
 }
 
 void Game::increaseSpeed() {
-    if (++fallenFiguresCounter % 40 == 0) {
+    if (m_speedIncreaseCoef == 0) return;
+    if (++fallenFiguresCounter % m_speedIncreaseCoef == 0) {
         figureFallDelay *= 0.8f;
         m_speed.increaseValue(1);
     }
