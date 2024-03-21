@@ -23,6 +23,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         src/objects/drawable/Score.cpp
         src/objects/drawable/Field.cpp
         src/objects/drawable/Text.cpp
+        src/objects/drawable/Background.cpp
 
         src/utilities/Clock.cpp
         src/utilities/DataManager.cpp

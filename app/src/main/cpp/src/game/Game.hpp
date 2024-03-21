@@ -8,6 +8,7 @@
 #include "../objects/drawable/Speed.hpp"
 #include "../objects/drawable/Field.hpp"
 #include "../objects/drawable/Text.hpp"
+#include "../objects/drawable/Background.hpp"
 #include "../objects/FigureManager.hpp"
 
 #include "../graphics/Texture.hpp"
@@ -37,12 +38,6 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<ShaderProgram>> shaderProgramMap;
 
-    std::shared_ptr<Texture> scoreTextTex;
-    std::shared_ptr<Texture> highScoreTextTex;
-    std::shared_ptr<Texture> speedTextTex;
-    std::unordered_map<int, std::shared_ptr<Texture>> cellTexMap;
-    std::unordered_map<int, std::shared_ptr<Texture>> numsTexMap;
-
     FigureManager m_figureManager;
     Field m_field;
     MiniScreen m_miniScreen;
@@ -52,6 +47,7 @@ private:
     Score m_score;
     HighScore m_highScore;
     Speed m_speed;
+    Background m_background;
 
     Clock clock;
     int nextColor = 0;

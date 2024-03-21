@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "stb_image.h"
 #include "MyAssetManager.h"
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -32,6 +31,7 @@ private:
     GLenum m_filter;
     GLenum m_wrapmode;
     GLenum m_mode;
+    static bool blendIsEnabled;
 
     unsigned int m_width;
     unsigned int m_height;

@@ -1,5 +1,7 @@
 #include "Texture.hpp"
 
+bool Texture::blendIsEnabled = false;
+
 Texture::Texture(const std::string& texturePath, const unsigned int channels, const GLenum filter, const GLenum wrapmode)
 	: m_filter(filter), m_wrapmode(wrapmode)
 {
@@ -8,6 +10,10 @@ Texture::Texture(const std::string& texturePath, const unsigned int channels, co
 }
 
 Texture::~Texture() {
+    if (blendIsEnabled){
+        glDisable(GL_BLEND);
+        blendIsEnabled = false;
+    }
 	glDeleteTextures(1, &m_ID);
 }
 
@@ -73,6 +79,11 @@ void Texture::createTexture(const unsigned int channels, const unsigned char* pi
 		break;
 	}
 
+    if (!blendIsEnabled) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        blendIsEnabled = true;
+    }
 	glGenTextures(1, &m_ID);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_ID);

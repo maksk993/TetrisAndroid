@@ -31,8 +31,6 @@ void Game::prepareToRender() {
     glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(m_screenWidth), 0.f, static_cast<float>(m_screenHeight),
                                             -1.f, 1.f);
     shaderProgramMap["sprite"]->setMatrix4("projectionMat", projectionMatrix);
-
-    Renderer::clearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
 void Game::run() {
@@ -176,7 +174,7 @@ void Game::setGamePaused() {
 }
 
 void Game::showGame() {
-    Renderer::clear();
+    m_background.render();
     m_field.render();
     m_scoreText.render();
     m_highScoreText.render();
@@ -188,6 +186,10 @@ void Game::showGame() {
 }
 
 void Game::loadResources() {
+    std::shared_ptr<Texture> scoreTextTex, highScoreTextTex, speedTextTex, backgroundTex;
+    std::unordered_map<int, std::shared_ptr<Texture>> cellTexMap, numsTexMap;
+
+    backgroundTex = std::make_shared<Texture>("res/textures/background288x590.png");
     scoreTextTex = std::make_shared<Texture>("res/textures/score220x48.png");
     highScoreTextTex  = std::make_shared<Texture>("res/textures/highscore220x24.png");
     speedTextTex = std::make_shared<Texture>("res/textures/speed96x22.png");
@@ -217,6 +219,14 @@ void Game::loadResources() {
     std::vector<std::shared_ptr<Sprite>> scoreSprites(numsTexMap.size());
     std::vector<std::shared_ptr<Sprite>> highScoreSprites(numsTexMap.size());
     std::vector<std::shared_ptr<Sprite>> speedSprites(numsTexMap.size());
+
+    std::shared_ptr<Sprite> backgroundSprite = std::make_shared<Sprite>(
+            backgroundTex,
+            shaderProgramMap["sprite"],
+            glm::vec2(0),
+            glm::vec2(m_screenWidth, m_screenHeight),
+            0.f
+    );
 
     std::shared_ptr<Sprite> scoreTextSprite = std::make_shared<Sprite>(
             scoreTextTex,
@@ -276,6 +286,7 @@ void Game::loadResources() {
         );
     }
 
+    m_background.init(backgroundSprite);
     m_scoreText.init(scoreTextSprite);
     m_highScoreText.init(highScoreTextSprite);
     m_speedText.init(speedTextSprite);
