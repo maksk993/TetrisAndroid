@@ -1,16 +1,19 @@
-package com.example.tetrisandroid;
+package com.example.tetrisandroid.ui;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import com.example.tetrisandroid.R;
+import com.example.tetrisandroid.data.DataManager;
+
+import java.util.Objects;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -21,18 +24,18 @@ public class OptionsActivity extends AppCompatActivity {
     private float startSpeed;
     private int speedLevel;
     private int speedIncreaseCoef;
+    private DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        Intent intent = getIntent();
-        if (intent != null){
-            startSpeed = intent.getFloatExtra("StartSpeed", 1.f);
-            speedLevel = intent.getIntExtra("Speed level", 1);
-            speedIncreaseCoef = intent.getIntExtra("Speed increase coef", 40);
-        }
+        dataManager = new DataManager(this);
+
+        startSpeed = dataManager.getStartSpeed();
+        speedLevel = dataManager.getSpeedLevel();
+        speedIncreaseCoef = dataManager.getSpeedIncreaseCoef();
 
         for (Buttons button : Buttons.values()) {
             addButtonLogic(button);
@@ -40,49 +43,37 @@ public class OptionsActivity extends AppCompatActivity {
 
         createStartSpeedSpinner();
         createIncreaseSpeedSpinner();
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     void addButtonLogic(Buttons code){
         Button button;
-        switch (code){
-            case SAVE_AND_RETURN:
-                button = findViewById(R.id.buttonSaveAndReturn);
-                break;
-            default:
-                button = findViewById(R.id.buttonDefault);
+        if (Objects.requireNonNull(code) == Buttons.SAVE_AND_RETURN) {
+            button = findViewById(R.id.buttonSaveAndReturn);
+        }
+        else {
+            button = findViewById(R.id.buttonDefault);
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (code){
-                    case SAVE_AND_RETURN:
-                        overridePendingTransition(0, 0);
-                        Intent intent = new Intent(OptionsActivity.this, StartMenuActivity.class);
-                        intent.putExtra("StartSpeed", startSpeed);
-                        intent.putExtra("Speed level", speedLevel);
-                        intent.putExtra("Speed increase coef", speedIncreaseCoef);
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(0, 0);
-                        break;
-                    default:
-                        startSpeed = 1.f;
-                        speedLevel = 1;
-                        speedIncreaseCoef = 40;
-                        setSelectionForSpinner(findViewById(R.id.spinnerStartSpeed),
-                                getResources().getStringArray(R.array.startSpeedSpinner), speedLevel);
-                        setSelectionForSpinner(findViewById(R.id.spinnerIncreaseSpeed),
-                                getResources().getStringArray(R.array.increaseSpeedSpinner), speedIncreaseCoef);
-                        break;
-                }
+        button.setOnClickListener(view -> {
+            if (code == Buttons.SAVE_AND_RETURN) {
+                dataManager.setStartSpeed(startSpeed);
+                dataManager.setSpeedIncreaseCoef(speedIncreaseCoef);
+                dataManager.setSpeedLevel(speedLevel);
+
+                overridePendingTransition(0, 0);
+                Intent intent = new Intent(OptionsActivity.this, StartMenuActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+            else {
+                startSpeed = 1.f;
+                speedLevel = 1;
+                speedIncreaseCoef = 40;
+                setSelectionForSpinner(findViewById(R.id.spinnerStartSpeed),
+                        getResources().getStringArray(R.array.startSpeedSpinner), speedLevel);
+                setSelectionForSpinner(findViewById(R.id.spinnerIncreaseSpeed),
+                        getResources().getStringArray(R.array.increaseSpeedSpinner), speedIncreaseCoef);
             }
         });
     }

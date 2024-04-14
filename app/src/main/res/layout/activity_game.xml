@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-    <com.example.renderer.MySurfaceView
+    <com.example.tetrisandroid.renderer.MySurfaceView
         android:id="@+id/MySurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,8 +1,10 @@
-package com.example.renderer;
+package com.example.tetrisandroid.renderer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+
+import com.example.tetrisandroid.renderer.MyRenderer;
 
 public class MySurfaceView extends GLSurfaceView {
     private MyRenderer m_renderer;

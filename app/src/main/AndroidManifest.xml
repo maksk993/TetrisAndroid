@@ -13,11 +13,13 @@
         android:theme="@style/Theme.TetrisAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".OptionsActivity"
-            android:exported="false" />
+            android:name=".ui.OptionsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".StartMenuActivity"
-            android:exported="true">
+            android:name=".ui.StartMenuActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +27,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameActivity"
-            android:exported="true">
+            android:name=".ui.GameActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

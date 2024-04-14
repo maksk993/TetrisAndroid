@@ -1,6 +1,5 @@
-package com.example.tetrisandroid;
+package com.example.tetrisandroid.ui;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,21 +8,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
-import com.example.datamanager.DataManager;
-import com.example.renderer.MySurfaceView;
+import com.example.tetrisandroid.data.DataManager;
+import com.example.tetrisandroid.renderer.MySurfaceView;
+import com.example.tetrisandroid.R;
 
 public class GameActivity extends AppCompatActivity  {
-
     static {
         System.loadLibrary("tetrisandroid");
     }
+
     private MySurfaceView m_surfaceView;
     private DataManager m_dataManager;
-    enum Buttons {
+    private enum Buttons {
         LEFT, DOWN, RIGHT, UP, ROTATE, RESET, PAUSE
     };
     private final Handler m_handler = new Handler();
@@ -34,21 +32,17 @@ public class GameActivity extends AppCompatActivity  {
             m_handler.postDelayed(m_runnableForButtonDown, 40);
         }
     };
-    private float m_startSpeed;
-    private int m_speedLevel;
-    private int m_speedIncreaseCoef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        Intent intent = getIntent();
-        if (intent != null){
-            m_startSpeed = intent.getFloatExtra("StartSpeed", 1.f) * 1000;
-            m_speedLevel = intent.getIntExtra("Speed level", 1);
-            m_speedIncreaseCoef = intent.getIntExtra("Speed increase coef", 40);
-        }
+        m_dataManager = new DataManager(this);
+        m_dataManager.getStartHighScore();
+        float startSpeed = m_dataManager.getStartSpeed() * 1000;
+        int speedLevel = m_dataManager.getSpeedLevel();
+        int speedIncreaseCoef = m_dataManager.getSpeedIncreaseCoef();
 
         m_surfaceView = (MySurfaceView) findViewById(R.id.MySurfaceView);
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -56,14 +50,7 @@ public class GameActivity extends AppCompatActivity  {
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
         m_surfaceView.setSizes(screenWidth, screenHeight);
-        m_surfaceView.setSpeed(m_startSpeed, m_speedLevel, m_speedIncreaseCoef);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        m_surfaceView.setSpeed(startSpeed, speedLevel, speedIncreaseCoef);
 
         AssetManager assetManager = getAssets();
         cppAssetManagerInit(assetManager);
@@ -71,9 +58,6 @@ public class GameActivity extends AppCompatActivity  {
         for (Buttons button : Buttons.values()){ // handle Buttons
             addButtonLogic(button);
         }
-
-        m_dataManager = new DataManager(this);
-        m_dataManager.getStartHighScore();
     }
 
     @Override
@@ -135,38 +119,35 @@ public class GameActivity extends AppCompatActivity  {
                 button = findViewById(R.id.buttonPause);
         }
 
-        button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                    switch (code) {
-                        case DOWN:
-                            m_handler.post(m_runnableForButtonDown);
-                            break;
-                        case RESET:
-                            cppHandleTouch(code.ordinal());
+        button.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                switch (code) {
+                    case DOWN:
+                        m_handler.post(m_runnableForButtonDown);
+                        break;
+                    case RESET:
+                        cppHandleTouch(code.ordinal());
+                        changePauseButtonToResume(false);
+                        break;
+                    case PAUSE:
+                        cppHandleTouch(code.ordinal());
+                        if (cppIsGamePaused())
+                            changePauseButtonToResume(true);
+                        else
                             changePauseButtonToResume(false);
-                            break;
-                        case PAUSE:
-                            cppHandleTouch(code.ordinal());
-                            if (cppIsGamePaused())
-                                changePauseButtonToResume(true);
-                            else
-                                changePauseButtonToResume(false);
-                            break;
-                        default:
-                            cppHandleTouch(code.ordinal());
-                    }
-                    return true;
+                        break;
+                    default:
+                        cppHandleTouch(code.ordinal());
                 }
-                else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if (code == Buttons.DOWN){
-                        m_handler.removeCallbacks(m_runnableForButtonDown);
-                    }
-                    return true;
-                }
-                return false;
+                return true;
             }
+            else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                if (code == Buttons.DOWN){
+                    m_handler.removeCallbacks(m_runnableForButtonDown);
+                }
+                return true;
+            }
+            return false;
         });
     }
 
