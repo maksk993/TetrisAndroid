@@ -2,7 +2,7 @@
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_example_tetrisandroid_ui_GameActivity_cppAssetManagerInit(JNIEnv *env, jobject thiz,
+Java_com_example_tetrisandroid_ui_game_GameViewModel_cppAssetManagerInit(JNIEnv *env, jobject thiz,
                                                              jobject asset_manager) {
     MyAssetManager& myAssetManager = MyAssetManager::getAssetManager();
     AAssetManager* mgr = AAssetManager_fromJava(env, asset_manager);

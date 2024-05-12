@@ -9,7 +9,7 @@ std::unique_ptr<Game> pGame;
 
 extern "C" {
     JNIEXPORT void JNICALL
-    Java_com_example_tetrisandroid_renderer_MyRenderer_cppStartGame(JNIEnv *env, jobject thiz, jint screen_width,
+    Java_com_example_tetrisandroid_ui_game_renderer_MyRenderer_cppStartGame(JNIEnv *env, jobject thiz, jint screen_width,
                                                       jint screen_height,
                                                       jfloat start_speed, jint speed_level,
                                                       jint increase_coef) {
@@ -18,23 +18,23 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_com_example_tetrisandroid_renderer_MyRenderer_cppRun(JNIEnv *env, jobject thiz) {
+    Java_com_example_tetrisandroid_ui_game_renderer_MyRenderer_cppRun(JNIEnv *env, jobject thiz) {
         pGame->run();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_example_tetrisandroid_ui_GameActivity_cppHandleTouch(JNIEnv *env, jobject thiz,
+    Java_com_example_tetrisandroid_ui_game_GameViewModel_cppHandleTouch(JNIEnv *env, jobject thiz,
                                                                   jint code) {
         pGame->handleTouch(code);
     }
 
     JNIEXPORT jboolean JNICALL
-    Java_com_example_tetrisandroid_ui_GameActivity_cppIsGamePaused(JNIEnv *env, jobject thiz) {
+    Java_com_example_tetrisandroid_ui_game_GameViewModel_cppIsGamePaused(JNIEnv *env, jobject thiz) {
         return pGame->isGamePaused();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_example_tetrisandroid_ui_GameActivity_cppSetGamePaused(JNIEnv *env, jobject thiz) {
+    Java_com_example_tetrisandroid_ui_game_GameViewModel_cppSetGamePaused(JNIEnv *env, jobject thiz) {
         pGame->setGamePaused();
     }
 }
